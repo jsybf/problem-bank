@@ -2,6 +2,7 @@ package gitp.problembank.domain;
 
 import java.time.Year;
 import lombok.Getter;
+import lombok.Setter;
 import org.springframework.data.neo4j.core.schema.GeneratedValue;
 import org.springframework.data.neo4j.core.schema.Id;
 import org.springframework.data.neo4j.core.schema.Node;
@@ -14,14 +15,14 @@ public class YearTag {
 	@GeneratedValue
 	private String id;
 
+	@Setter
 	private Year year;
 
-	private YearTag(String id, Year year) {
-		this.id = id;
+	private YearTag(Year year) {
 		this.year = year;
 	}
 
 	public static YearTag of(Year year) {
-		return new YearTag(null, year);
+		return new YearTag(year);
 	}
 }
