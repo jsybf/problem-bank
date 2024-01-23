@@ -4,6 +4,7 @@ import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
 import lombok.Getter;
+import lombok.Setter;
 import org.springframework.data.neo4j.core.schema.GeneratedValue;
 import org.springframework.data.neo4j.core.schema.Id;
 import org.springframework.data.neo4j.core.schema.Node;
@@ -14,7 +15,8 @@ import org.springframework.data.neo4j.core.support.UUIDStringGenerator;
 @Getter
 public class Problem {
 
-	@Id @GeneratedValue(UUIDStringGenerator.class)
+	@Id
+	@GeneratedValue(UUIDStringGenerator.class)
 	private String id;
 
 	private String name;
@@ -27,6 +29,10 @@ public class Problem {
 	@Relationship(type = "tagged")
 	private Set<SkillTag> skillTagSet = new HashSet<>();
 
+	@Setter
+	@Relationship(type = "source")
+	private ProblemSource problemSource;
+
 	public void addRelatedProblem(Problem... problems) {
 		relatedProblemSet.addAll(Arrays.asList(problems));
 		Arrays.asList(problems).forEach(problem -> problem.getRelatedProblemSet().add(this));
@@ -37,7 +43,7 @@ public class Problem {
 		problem.getRelatedProblemSet().removeIf(p -> p.getName().equals(this.getName()));
 	}
 
-	public Problem(String id, String name, Long rdbmsId) {
+	private Problem(String id, String name, Long rdbmsId) {
 		this.id = id;
 		this.name = name;
 		this.rdbmsId = rdbmsId;
