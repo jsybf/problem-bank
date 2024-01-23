@@ -1,6 +1,7 @@
 package gitp.problembank.domain;
 
 import lombok.Getter;
+import lombok.Setter;
 import org.springframework.data.neo4j.core.schema.GeneratedValue;
 import org.springframework.data.neo4j.core.schema.Id;
 import org.springframework.data.neo4j.core.schema.Node;
@@ -13,14 +14,14 @@ public class SkillTag {
 	@GeneratedValue
 	private String id;
 
+	@Setter
 	private String title;
 
-	private SkillTag(String id, String title) {
-		this.id = id;
+	private SkillTag(String title) {
 		this.title = title;
 	}
 
 	public static SkillTag of(String title) {
-		return new SkillTag(null, title);
+		return new SkillTag(title);
 	}
 }
