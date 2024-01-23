@@ -1,3 +1,6 @@
+### problem-bank setting ###
+**/src/test/**/sandbox/
+
 HELP.md
 .gradle
 build/
