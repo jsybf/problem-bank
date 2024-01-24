@@ -26,10 +26,12 @@ public class Problem {
 	@Setter
 	private Long rdbmsId;
 
+	@Setter
 	@Getter(AccessLevel.PRIVATE)
 	@Relationship(type = "related_problem")
 	private Set<Problem> relatedProblemSet = new HashSet<>();
 
+	@Setter
 	@Relationship(type = "tagged")
 	private Set<SkillTag> skillTagSet = new HashSet<>();
 
@@ -57,4 +59,7 @@ public class Problem {
 		problem.relatedProblemSet.removeIf(p -> p.getName().equals(this.getName()));
 	}
 
+	public Set<Problem> getRelatedProblemSet() {
+		return Set.copyOf(relatedProblemSet);
+	}
 }
