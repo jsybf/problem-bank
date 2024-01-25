@@ -62,4 +62,23 @@ public class Problem {
 	public Set<Problem> getRelatedProblemSet() {
 		return Set.copyOf(relatedProblemSet);
 	}
+
+	@Override
+	public boolean equals(Object o) {
+		if (this == o) {
+			return true;
+		}
+		if (o == null || getClass() != o.getClass()) {
+			return false;
+		}
+
+		Problem problem = (Problem) o;
+
+		return name.equals(problem.name);
+	}
+
+	@Override
+	public int hashCode() {
+		return name.hashCode();
+	}
 }

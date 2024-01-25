@@ -24,4 +24,23 @@ public class SkillTag {
 	public static SkillTag of(String title) {
 		return new SkillTag(title);
 	}
+
+	@Override
+	public boolean equals(Object o) {
+		if (this == o) {
+			return true;
+		}
+		if (o == null || getClass() != o.getClass()) {
+			return false;
+		}
+
+		SkillTag skillTag = (SkillTag) o;
+
+		return title.equals(skillTag.title);
+	}
+
+	@Override
+	public int hashCode() {
+		return title.hashCode();
+	}
 }
