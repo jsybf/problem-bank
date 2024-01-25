@@ -9,6 +9,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 @SpringBootTest
 @Slf4j
 public class Neo4jTestSupporter {
+
 	@BeforeAll
 	public static void beforeAll(@Autowired Neo4jTestUtils neo4jTestUtils) {
 		int deletedNodesCount = neo4jTestUtils.deleteAllNodes();
