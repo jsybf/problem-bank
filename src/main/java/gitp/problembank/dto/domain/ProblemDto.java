@@ -37,7 +37,7 @@ public class ProblemDto {
 		Set<ProblemDto> problemDtoSet = new HashSet<>();
 		for (Problem problem : entity.getRelatedProblemSet()) {
 			//if problem.name is contained in convertedEntityNameList then continue
-			if(convertedEntityNameList.contains(problem.getName())) {
+			if (convertedEntityNameList.contains(problem.getName())) {
 				continue;
 			}
 			List<String> list = Stream.concat(convertedEntityNameList.stream(),
