@@ -14,6 +14,8 @@ import java.util.stream.Collectors;
 @Getter
 public class ProblemDto {
 
+    private final String id;
+
     private final String name;
 
     private final Long rdbmsId;
@@ -25,11 +27,13 @@ public class ProblemDto {
     private final ProblemSourceDto problemSourceDto;
 
     public ProblemDto(
+            String id,
             String name,
             Long rdbmsId,
             Set<ProblemDto> relatedProblemDtoSet,
             Set<SkillTagDto> skillTagDtoSet,
             ProblemSourceDto problemSourceDto) {
+        this.id = id;
         this.name = name;
         this.rdbmsId = rdbmsId;
         this.relatedProblemDtoSet = relatedProblemDtoSet;
@@ -42,14 +46,13 @@ public class ProblemDto {
                 entity.getSkillTagSet().stream()
                         .map(SkillTagDto::toDto)
                         .collect(Collectors.toSet());
-        ProblemDto dto =
-                new ProblemDto(
-                        entity.getName(),
-                        entity.getRdbmsId(),
-                        new HashSet<ProblemDto>(),
-                        skillTagDtos,
-                        ProblemSourceDto.toDto(entity.getProblemSource()));
-        return dto;
+        return new ProblemDto(
+                entity.getId(),
+                entity.getName(),
+                entity.getRdbmsId(),
+                new HashSet<ProblemDto>(),
+                skillTagDtos,
+                ProblemSourceDto.toDto(entity.getProblemSource()));
     }
 
     private static void toDtoByDfs(

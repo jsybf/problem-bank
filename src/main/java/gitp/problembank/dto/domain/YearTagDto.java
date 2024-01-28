@@ -9,17 +9,20 @@ import java.time.Year;
 @Getter
 public class YearTagDto {
 
-	private final Year year;
+    private final String id;
 
-	public YearTagDto(Year year) {
-		this.year = year;
-	}
+    private final Year year;
 
-	public YearTag toEntity() {
-		return YearTag.of(year);
-	}
+    public YearTagDto(String id, Year year) {
+        this.id = id;
+        this.year = year;
+    }
 
-	public static YearTagDto toDto(YearTag entity) {
-		return new YearTagDto(entity.getYear());
-	}
+    public YearTag toEntity() {
+        return YearTag.of(year);
+    }
+
+    public static YearTagDto toDto(YearTag entity) {
+        return new YearTagDto(entity.getId(), entity.getYear());
+    }
 }
