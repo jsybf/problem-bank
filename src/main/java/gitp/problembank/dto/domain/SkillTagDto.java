@@ -6,17 +6,17 @@ import lombok.Getter;
 @Getter
 public class SkillTagDto {
 
-	private final String title;
+    private final String title;
 
-	public SkillTagDto(String title) {
-		this.title = title;
-	}
+    public SkillTagDto(String title) {
+        this.title = title;
+    }
 
-	public SkillTag toEntity() {
-		return SkillTag.of(title);
-	}
+    public SkillTag toEntity() {
+        return SkillTag.of(title);
+    }
 
-	public static SkillTagDto toDto(SkillTag entity) {
-		return new SkillTagDto(entity.getTitle());
-	}
+    public static SkillTagDto toDto(SkillTag entity) {
+        return new SkillTagDto(entity.getTitle());
+    }
 }

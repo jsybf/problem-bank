@@ -1,8 +1,10 @@
 package gitp.problembank.dto.domain;
 
 import gitp.problembank.domain.YearTag;
-import java.time.Year;
+
 import lombok.Getter;
+
+import java.time.Year;
 
 @Getter
 public class YearTagDto {
