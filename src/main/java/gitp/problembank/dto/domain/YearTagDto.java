@@ -1,6 +1,5 @@
 package gitp.problembank.dto.domain;
 
-import gitp.problembank.domain.SkillTag;
 import gitp.problembank.domain.YearTag;
 import java.time.Year;
 import lombok.Getter;

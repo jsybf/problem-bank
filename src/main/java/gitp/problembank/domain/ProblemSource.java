@@ -35,4 +35,28 @@ public class ProblemSource {
 	public static ProblemSource of(String name, ProblemSourceType sourceType, YearTag yearTag) {
 		return new ProblemSource(name, sourceType, yearTag);
 	}
+
+	@Override
+	public boolean equals(Object o) {
+		if (this == o) {
+			return true;
+		}
+		if (o == null || getClass() != o.getClass()) {
+			return false;
+		}
+
+		ProblemSource that = (ProblemSource) o;
+
+		if (sourceType != that.sourceType) {
+			return false;
+		}
+		return yearTag.equals(that.yearTag);
+	}
+
+	@Override
+	public int hashCode() {
+		int result = sourceType.hashCode();
+		result = 31 * result + yearTag.hashCode();
+		return result;
+	}
 }

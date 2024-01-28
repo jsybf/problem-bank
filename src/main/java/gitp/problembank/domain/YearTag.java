@@ -25,4 +25,23 @@ public class YearTag {
 	public static YearTag of(Year year) {
 		return new YearTag(year);
 	}
+
+	@Override
+	public boolean equals(Object o) {
+		if (this == o) {
+			return true;
+		}
+		if (o == null || getClass() != o.getClass()) {
+			return false;
+		}
+
+		YearTag yearTag = (YearTag) o;
+
+		return year.equals(yearTag.year);
+	}
+
+	@Override
+	public int hashCode() {
+		return year.hashCode();
+	}
 }
