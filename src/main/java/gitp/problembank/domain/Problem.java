@@ -3,7 +3,6 @@ package gitp.problembank.domain;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
-import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.data.neo4j.core.schema.GeneratedValue;
@@ -27,7 +26,6 @@ public class Problem {
 	private Long rdbmsId;
 
 	@Setter
-	@Getter(AccessLevel.PRIVATE)
 	@Relationship(type = "related_problem")
 	private Set<Problem> relatedProblemSet = new HashSet<>();
 
@@ -57,10 +55,6 @@ public class Problem {
 	public void removeRelatedProblem(Problem problem) {
 		relatedProblemSet.removeIf(p -> p.getName().equals(problem.getName()));
 		problem.relatedProblemSet.removeIf(p -> p.getName().equals(this.getName()));
-	}
-
-	public Set<Problem> getRelatedProblemSet() {
-		return Set.copyOf(relatedProblemSet);
 	}
 
 	@Override

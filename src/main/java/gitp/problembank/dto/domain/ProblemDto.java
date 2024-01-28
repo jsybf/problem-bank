@@ -1,12 +1,12 @@
 package gitp.problembank.dto.domain;
 
 import gitp.problembank.domain.Problem;
-import java.util.Collections;
+import gitp.problembank.domain.SkillTag;
+import java.util.HashMap;
 import java.util.HashSet;
-import java.util.List;
+import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 import lombok.Getter;
 
 @Getter
@@ -16,64 +16,87 @@ public class ProblemDto {
 
 	private final Long rdbmsId;
 
-	private final Set<ProblemDto> relatedProblemDtoSet = new HashSet<>();
+	private final Set<ProblemDto> relatedProblemDtoSet;
 
-	private final Set<SkillTagDto> skillTagDtoSet = new HashSet<>();
+	private final Set<SkillTagDto> skillTagDtoSet;
 
 	private final ProblemSourceDto problemSourceDto;
 
-	public ProblemDto(String name, Long rdbmsId, ProblemSourceDto problemSourceDto) {
+
+	public ProblemDto(String name, Long rdbmsId, Set<ProblemDto> relatedProblemDtoSet,
+		Set<SkillTagDto> skillTagDtoSet, ProblemSourceDto problemSourceDto) {
 		this.name = name;
 		this.rdbmsId = rdbmsId;
+		this.relatedProblemDtoSet = relatedProblemDtoSet;
+		this.skillTagDtoSet = skillTagDtoSet;
 		this.problemSourceDto = problemSourceDto;
 	}
 
-	private static ProblemDto toDtoRecursive(Problem entity, List<String> convertedEntityNameList) {
-		//create dto for current entity
-		ProblemDto problemDto = new ProblemDto(entity.getName(), entity.getRdbmsId(),
+	private static ProblemDto toDtoExceptRelatedProblemDtoSet(Problem entity) {
+		Set<SkillTagDto> skillTagDtos = entity.getSkillTagSet().stream().map(SkillTagDto::toDto)
+			.collect(Collectors.toSet());
+		ProblemDto dto = new ProblemDto(entity.getName(),
+			entity.getRdbmsId(),
+			new HashSet<ProblemDto>(),
+			skillTagDtos,
 			ProblemSourceDto.toDto(entity.getProblemSource()));
+		return dto;
+	}
 
-		//recursive call for related entity of current entity
-		Set<ProblemDto> problemDtoSet = new HashSet<>();
-		for (Problem problem : entity.getRelatedProblemSet()) {
-			//if problem.name is contained in convertedEntityNameList then continue
-			if (convertedEntityNameList.contains(problem.getName())) {
-				continue;
+	private static void toDtoByDfs(Problem entity, ProblemDto dto,
+		Map<Problem, ProblemDto> entityDtoMap) {
+		for (Problem relatedEntity : entity.getRelatedProblemSet()) {
+			if (!entityDtoMap.containsKey(relatedEntity)) {
+				//create dto
+				ProblemDto relatedDto = toDtoExceptRelatedProblemDtoSet(relatedEntity);
+				entityDtoMap.put(relatedEntity, relatedDto);
+				dto.getRelatedProblemDtoSet().add(relatedDto);
+				toDtoByDfs(relatedEntity, relatedDto, entityDtoMap);
+			} else {
+				dto.getRelatedProblemDtoSet().add(entityDtoMap.get(relatedEntity));
 			}
-			List<String> list = Stream.concat(convertedEntityNameList.stream(),
-				Stream.of(entity.getName())).toList();
-			problemDto.relatedProblemDtoSet.add(toDtoRecursive(problem, list));
 		}
+	}
 
-		return problemDto;
+	private static Problem toEntityExceptRelatedProblemSet(ProblemDto dto) {
+		Problem entity = Problem.of(dto.name, dto.rdbmsId, dto.problemSourceDto.toEntity());
+
+		Set<SkillTag> skillTagSet = dto.skillTagDtoSet.stream().map(SkillTagDto::toEntity)
+			.collect(Collectors.toSet());
+		entity.getSkillTagSet().addAll(skillTagSet);
+
+		return entity;
+	}
+
+	private static void toEntityByDfs(ProblemDto dto, Problem entity,
+		Map<ProblemDto, Problem> dtoEntityMap) {
+		for (ProblemDto relatedDto : dto.relatedProblemDtoSet) {
+			if (!dtoEntityMap.containsKey(relatedDto)) {
+				Problem relatedEntity = toEntityExceptRelatedProblemSet(relatedDto);
+				dtoEntityMap.put(relatedDto, relatedEntity);
+				entity.getRelatedProblemSet().add(relatedEntity);
+				toEntityByDfs(relatedDto, relatedEntity, dtoEntityMap);
+			} else {
+				entity.getRelatedProblemSet().add(dtoEntityMap.get(relatedDto));
+			}
+		}
 	}
 
 	public static ProblemDto toDto(Problem entity) {
-		return toDtoRecursive(entity, Collections.emptyList());
+
+		ProblemDto dto = toDtoExceptRelatedProblemDtoSet(entity);
+		Map<Problem, ProblemDto> entityDtoMap = new HashMap<>();
+		entityDtoMap.put(entity, dto);
+		toDtoByDfs(entity, dto, entityDtoMap);
+		return dto;
 	}
 
-//	public static ProblemDto toDto(Problem entity) {
-//		ProblemDto problemDto = new ProblemDto(entity.getName(), entity.getRdbmsId(),
-//			ProblemSourceDto.toDto(entity.getProblemSource()));
-//		for (Problem relatedProblem : entity.getRelatedProblemSet()) {
-//			for (Problem indirectRelatedProblem: relatedProblem.getRelatedProblemSet()) {
-//				if(indirectRelatedProblem.equals(entity)) {
-//					continue;
-//				}
-//
-//			}
-//		}
-//		entity.getSkillTagSet()
-//			.forEach(skillTag -> problemDto.skillTagDtoSet.add(SkillTagDto.toDto(skillTag)));
-//		return problemDto;
-//	}
 
 	public Problem toEntity() {
-		Problem problem = Problem.of(name, rdbmsId, problemSourceDto.toEntity());
-		skillTagDtoSet.forEach(dto -> problem.getSkillTagSet().add(dto.toEntity()));
-		problem.setRelatedProblemSet(
-			relatedProblemDtoSet.stream().map(dto -> dto.toEntity()).collect(Collectors.toSet()));
-		return problem;
+		Problem entity = toEntityExceptRelatedProblemSet(this);
+		Map<ProblemDto, Problem> dtoEntityMap = new HashMap<>();
+		dtoEntityMap.put(this, entity);
+		toEntityByDfs(this, entity, dtoEntityMap);
+		return entity;
 	}
-
 }
