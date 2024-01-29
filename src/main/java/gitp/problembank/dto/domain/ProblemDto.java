@@ -3,30 +3,37 @@ package gitp.problembank.dto.domain;
 import gitp.problembank.domain.Problem;
 import gitp.problembank.domain.SkillTag;
 
+import lombok.AccessLevel;
 import lombok.Getter;
+import lombok.Setter;
 
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
 
 @Getter
+@Setter
 public class ProblemDto {
 
-    private final String id;
+    @Setter(AccessLevel.PRIVATE)
+    private String id;
 
-    private final String name;
+    private String name;
 
-    private final Long rdbmsId;
+    private Long rdbmsId;
 
-    private final Set<ProblemDto> relatedProblemDtoSet;
+    @Setter(AccessLevel.PRIVATE)
+    private Set<ProblemDto> relatedProblemDtoSet;
 
-    private final Set<SkillTagDto> skillTagDtoSet;
+    @Setter(AccessLevel.PRIVATE)
+    private Set<SkillTagDto> skillTagDtoSet;
 
-    private final ProblemSourceDto problemSourceDto;
+    private ProblemSourceDto problemSourceDto;
 
-    public ProblemDto(
+    private ProblemDto(
             String id,
             String name,
             Long rdbmsId,
@@ -41,12 +48,27 @@ public class ProblemDto {
         this.problemSourceDto = problemSourceDto;
     }
 
+    public static ProblemDto of(
+            String id,
+            String name,
+            Long rdbmsId,
+            Set<ProblemDto> relatedProblemDtoSet,
+            Set<SkillTagDto> skillTagDtoSet,
+            ProblemSourceDto problemSourceDto) {
+        if (id == null) {
+            throw new IllegalArgumentException("id must not be null");
+        }
+
+        return new ProblemDto(
+                id, name, rdbmsId, relatedProblemDtoSet, skillTagDtoSet, problemSourceDto);
+    }
+
     private static ProblemDto toDtoExceptRelatedProblemDtoSet(Problem entity) {
         Set<SkillTagDto> skillTagDtos =
                 entity.getSkillTagSet().stream()
                         .map(SkillTagDto::toDto)
                         .collect(Collectors.toSet());
-        return new ProblemDto(
+        return ProblemDto.of(
                 entity.getId(),
                 entity.getName(),
                 entity.getRdbmsId(),
@@ -109,5 +131,22 @@ public class ProblemDto {
         dtoEntityMap.put(this, entity);
         toEntityByDfs(this, entity, dtoEntityMap);
         return entity;
+    }
+
+    public void addRelatedProblemDto(ProblemDto... dtos) {
+        List.of(dtos).forEach(dto -> dto.getRelatedProblemDtoSet().add(this));
+        relatedProblemDtoSet.addAll(List.of(dtos));
+    }
+
+    public void removeRelatedProblemDto(ProblemDto problemDto) {
+        assert problemDto.getId() != null && id != null;
+
+        boolean removedCompletely =
+                problemDto.getRelatedProblemDtoSet().removeIf(dto -> dto.getId() == id)
+                        && relatedProblemDtoSet.removeIf(dto -> dto.getId() == problemDto.getId());
+
+        if (!removedCompletely) {
+            throw new IllegalStateException("remove failed");
+        }
     }
 }
