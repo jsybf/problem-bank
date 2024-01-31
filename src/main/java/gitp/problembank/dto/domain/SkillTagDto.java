@@ -1,22 +1,26 @@
 package gitp.problembank.dto.domain;
 
 import gitp.problembank.domain.SkillTag;
+
 import lombok.Getter;
 
 @Getter
 public class SkillTagDto {
 
-	private final String title;
+    private final String id;
 
-	public SkillTagDto(String title) {
-		this.title = title;
-	}
+    private final String title;
 
-	public SkillTag toEntity() {
-		return SkillTag.of(title);
-	}
+    public SkillTagDto(String id, String title) {
+        this.id = id;
+        this.title = title;
+    }
 
-	public static SkillTagDto toDto(SkillTag entity) {
-		return new SkillTagDto(entity.getTitle());
-	}
+    public SkillTag toEntity() {
+        return SkillTag.of(title);
+    }
+
+    public static SkillTagDto toDto(SkillTag entity) {
+        return new SkillTagDto(entity.getId(), entity.getTitle());
+    }
 }
