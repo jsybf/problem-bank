@@ -6,6 +6,7 @@ import gitp.problembank.dto.domain.ProblemDto;
 import gitp.problembank.dto.domain.SkillTagDto;
 import gitp.problembank.repository.ProblemRepository;
 
+import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 
 import org.springframework.stereotype.Service;
@@ -23,6 +24,11 @@ import java.util.stream.Collectors;
 public class ProblemService {
 
     private final ProblemRepository problemRepository;
+
+    @Transactional(readOnly = true)
+    public Optional<ProblemDto> findById(String id) {
+        return problemRepository.findById(id).map(ProblemDto::toDto);
+    }
 
     public void save(ProblemDto problemDto) {
         if (problemDto.getId() != null) {
