@@ -1,7 +1,7 @@
 package gitp.problembank.service;
 
 import gitp.problembank.domain.Problem;
-import gitp.problembank.domain.SkillTag;
+import gitp.problembank.domain.tag.SkillTag;
 import gitp.problembank.dto.domain.ProblemDto;
 import gitp.problembank.dto.domain.SkillTagDto;
 import gitp.problembank.repository.ProblemRepository;

@@ -3,7 +3,7 @@ package gitp.problembank.service;
 import gitp.problembank.domain.Problem;
 import gitp.problembank.domain.ProblemSource;
 import gitp.problembank.domain.ProblemSourceType;
-import gitp.problembank.domain.YearTag;
+import gitp.problembank.domain.tag.YearTag;
 import gitp.problembank.repository.ProblemRepository;
 import gitp.problembank.repository.ProblemSourceRepository;
 import gitp.problembank.utils.Neo4jTestSupporter;

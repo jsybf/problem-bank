@@ -1,6 +1,6 @@
 package gitp.problembank.repository;
 
-import gitp.problembank.domain.YearTag;
+import gitp.problembank.domain.tag.YearTag;
 
 import org.springframework.data.neo4j.repository.Neo4jRepository;
 
