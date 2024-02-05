@@ -11,17 +11,16 @@ import java.util.List;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
-public class IntegrateTestDataLoader extends Neo4jTestSupporter{
-    @Autowired
-    ProblemRepository problemRepository;
+public class IntegrateTestDataLoader extends Neo4jTestSupporter {
+    @Autowired ProblemRepository problemRepository;
 
     @Test
     void data_1() throws Exception {
         ProblemSource ps1 =
-            ProblemSource.of("ps1", ProblemSourceType.KICE, YearTag.of(Year.of(2023)));
+                ProblemSource.of("ps1", ProblemSourceType.KICE, YearTag.of(Year.of(2023)));
 
         ProblemSource ps2 =
-            ProblemSource.of("ps2", ProblemSourceType.MOCK_TEST , YearTag.of(Year.of(2022)));
+                ProblemSource.of("ps2", ProblemSourceType.MOCK_TEST, YearTag.of(Year.of(2022)));
 
         SkillTag s1 = SkillTag.of("skill_tag_1");
         SkillTag s2 = SkillTag.of("skill_tag_2");
