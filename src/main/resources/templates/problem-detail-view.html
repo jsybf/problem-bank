@@ -16,45 +16,45 @@
   </style>
 </head>
 <body>
-  <main>
-    <div class="container-fluid d-flex">
-      <div class="w-50 left-area m-3 p-2 border border-danger">
-        <span th:text="${title}" class="fs-3">title</span>
-        <hr>
-        <span class="fs-5">source:</span>
-        <span th:text="${source.getName()}"></span>
-        <hr>
-        <span class="fs-5">year:</span>
-        <span th:text="${source.getYearTagDto().getYear()}"></span>
+<main>
+  <div class="container-fluid d-flex">
+    <div class="w-50 left-area m-3 p-2 border border-danger">
+      <span th:text="${title}" class="fs-3">title</span>
+      <hr>
+      <span class="fs-5">source:</span>
+      <span th:text="${source.getName()}"></span>
+      <hr>
+      <span class="fs-5">year:</span>
+      <span th:text="${source.getYearTagDto().getYear()}"></span>
 
-        <hr>
-        <span class="fs-5">skill-tag:</span>
-        <div class="d-flex flex-wrap">
-          <a th:each="skilltag: ${skillTags}" href="#" class="btn btn-dark m-1 btn-sm"
-             th:text="${skilltag.getTitle()}"></a>
-
-        </div>
-
-        <hr>
-        <span>related problem: </span>
-        <table>
-          <tr>
-            <th>title</th>
-            <th>source</th>
-            <th>year</th>
-          </tr>
-          <tr th:each="relatedProblem:${relatedProblems}">
-            <th th:text="${relatedProblem.getName()}"></th>
-            <th th:text="${relatedProblem.getProblemSourceDto().getName()}"></th>
-            <th th:text="${relatedProblem.getProblemSourceDto().getYearTagDto().getYear()}"></th>
-          </tr>
-        </table>
+      <hr>
+      <span class="fs-5">skill-tag:</span>
+      <div class="d-flex flex-wrap">
+        <a th:each="skilltag: ${skillTags}" href="#" class="btn btn-dark m-1 btn-sm"
+           th:text="${skilltag.getTitle()}"></a>
 
       </div>
-      <div class="w-50 right-area m-3 border border-danger">
 
-      </div>
+      <hr>
+      <span>related problem: </span>
+      <table>
+        <tr>
+          <th>title</th>
+          <th>source</th>
+          <th>year</th>
+        </tr>
+        <tr th:each="relatedProblem:${relatedProblems}">
+          <th th:text="${relatedProblem.getName()}"></th>
+          <th th:text="${relatedProblem.getProblemSourceDto().getName()}"></th>
+          <th th:text="${relatedProblem.getProblemSourceDto().getYearTagDto().getYear()}"></th>
+        </tr>
+      </table>
+
     </div>
-  </main>
+    <div class="w-50 right-area m-3 border border-danger">
+
+    </div>
+  </div>
+</main>
 </body>
 </html>

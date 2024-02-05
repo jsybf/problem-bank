@@ -1,6 +1,7 @@
 package gitp.problembank.domain;
 
 import gitp.problembank.domain.tag.SkillTag;
+
 import lombok.Getter;
 import lombok.Setter;
 
