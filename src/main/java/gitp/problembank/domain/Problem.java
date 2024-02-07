@@ -1,6 +1,7 @@
 package gitp.problembank.domain;
 
 import gitp.problembank.domain.tag.SkillTag;
+import gitp.problembank.domain.tag.TailUnitTag;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -39,14 +40,24 @@ public class Problem {
     @Relationship(type = "source")
     private ProblemSource problemSource;
 
-    public Problem(String name, Long rdbmsId, ProblemSource problemSource) {
+    @Setter
+    @Relationship(type = "tagged")
+    private TailUnitTag tailUnitTag;
+
+
+    public Problem(String name, Long rdbmsId, ProblemSource problemSource, TailUnitTag tailUnitTag) {
         this.name = name;
         this.rdbmsId = rdbmsId;
         this.problemSource = problemSource;
+        this.tailUnitTag = tailUnitTag;
     }
 
     public static Problem of(String name, Long rdbmsId, ProblemSource problemSource) {
-        return new Problem(name, rdbmsId, problemSource);
+        return new Problem(name, rdbmsId, problemSource, null);
+    }
+
+    public static Problem of(String name, Long rdbmsId, ProblemSource problemSource, TailUnitTag tailUnitTag) {
+        return new Problem(name, rdbmsId, problemSource, tailUnitTag);
     }
 
     public void addRelatedProblem(Problem... problems) {

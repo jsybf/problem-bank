@@ -2,6 +2,7 @@ package gitp.problembank.controller;
 
 import gitp.problembank.dto.domain.ProblemDto;
 import gitp.problembank.service.ProblemService;
+import gitp.problembank.service.UnitTagService;
 
 import lombok.RequiredArgsConstructor;
 
@@ -16,6 +17,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @RequiredArgsConstructor
 public class ProblemController {
     private final ProblemService problemService;
+    private final UnitTagService unitTagService;
 
     @GetMapping("/{id}")
     public String detailView(@PathVariable String id, Model model) {
@@ -25,6 +27,9 @@ public class ProblemController {
         model.addAttribute("skillTags", dto.getSkillTagDtoSet());
         model.addAttribute("relatedProblems", dto.getRelatedProblemDtoSet());
         model.addAttribute("title", dto.getName());
+        model.addAttribute(
+                "unit",
+                unitTagService.getUnitChainDtoByTailUnitTagId(dto.getTailUnitTagDto().getId()));
 
         return "problem-detail-view";
     }
