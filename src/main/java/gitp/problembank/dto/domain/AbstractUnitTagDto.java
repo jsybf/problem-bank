@@ -8,7 +8,8 @@ import lombok.Setter;
 
 @Getter
 public class AbstractUnitTagDto {
-    private String id;
+
+    @Setter private String id;
 
     @Setter private String unitName;
     @Setter private Integer unitNum;

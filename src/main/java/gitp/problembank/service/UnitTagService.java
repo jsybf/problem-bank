@@ -24,41 +24,47 @@ public class UnitTagService {
     }
 
     /**
-     * save unitChain
-     * if unit in unitChain is already persisted then add subordinate unit to this unit and save
-     * if unit in unitChain is not already persisted then create new unit
+     * save unitChain if unit in unitChain is already persisted then add subordinate unit to this
+     * unit and save if unit in unitChain is not already persisted then create new unit
+     *
      * @param unitChainDto
      */
     public void saveUnitChain(UnitChainDto unitChainDto) {
-        if (unitChainDto.getHeadUnitId() == null) {
+        if (unitChainDto.getHeadUnit().getId() == null) {
             HeadUnitTag headUnitTag =
-                    new HeadUnitTag(unitChainDto.getHeadUnitName(), unitChainDto.getHeadUnitNum());
+                    new HeadUnitTag(
+                            unitChainDto.getHeadUnit().getUnitName(),
+                            unitChainDto.getHeadUnit().getUnitNum());
             unitTagCustomRepository.saveHead(headUnitTag);
-            unitChainDto.setHeadUnitId(headUnitTag.getId());
+            unitChainDto.getHeadUnit().setId(headUnitTag.getId());
         }
-        if (unitChainDto.getMiddleUnitId() == null) {
+        if (unitChainDto.getMiddleUnit().getId() == null) {
             MiddleUnitTag middleUnitTag =
                     new MiddleUnitTag(
-                            unitChainDto.getMiddleUnitName(), unitChainDto.getMiddleUnitNum());
+                            unitChainDto.getMiddleUnit().getUnitName(),
+                            unitChainDto.getMiddleUnit().getUnitNum());
             HeadUnitTag headUnitTag =
                     unitTagCustomRepository
-                            .findHeadById(unitChainDto.getHeadUnitId())
+                            .findHeadById(unitChainDto.getHeadUnit().getId())
                             .orElseThrow();
             headUnitTag.getMiddleUnitTagSet().add(middleUnitTag);
             unitTagCustomRepository.saveHead(headUnitTag);
-            unitChainDto.setMiddleUnitId(middleUnitTag.getId());
+            unitChainDto.getMiddleUnit().setId(middleUnitTag.getId());
         }
-        if (unitChainDto.getTailUnitId() == null) {
-            TailUnitTag tailUnitTag = new TailUnitTag(unitChainDto.getTailUnitName(), unitChainDto.getTailUnitNum());
-            MiddleUnitTag middleUnitTag = unitTagCustomRepository.findMiddleById(unitChainDto.getMiddleUnitId())
-                .orElseThrow();
+        if (unitChainDto.getTailUnit().getId() == null) {
+            TailUnitTag tailUnitTag =
+                    new TailUnitTag(
+                            unitChainDto.getTailUnit().getUnitName(),
+                            unitChainDto.getMiddleUnit().getUnitNum());
+            MiddleUnitTag middleUnitTag =
+                    unitTagCustomRepository
+                            .findMiddleById(unitChainDto.getMiddleUnit().getId())
+                            .orElseThrow();
             middleUnitTag.getTailUnitTagSet().add(tailUnitTag);
             unitTagCustomRepository.saveMiddle(middleUnitTag);
-            unitChainDto.setTailUnitId(tailUnitTag.getId());
+            unitChainDto.getTailUnit().setId(tailUnitTag.getId());
         }
     }
 
-    public void updateUnitContentById(String id) {
-        
-    }
+    public void updateUnitContentById(String id) {}
 }
