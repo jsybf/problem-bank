@@ -34,10 +34,13 @@ public class UnitTagCustomRepositoryImpl implements UnitTagCustomRepository {
             RETURN
                 head.unitName as headUnitName
                 , head.unitNum as headUnitNum
+                , head.id as headId
                 , middle.unitName as middleUnitName
                 , middle.unitNum as middleUnitNum
+                , middle.id as middleId
                 , tail.unitName as tailUnitName
                 , tail.unitNum as tailUnitNum
+                , tail.id as tailId
             """;
 
         Optional<UnitChainDto> unitChainDto =
@@ -50,11 +53,14 @@ public class UnitTagCustomRepositoryImpl implements UnitTagCustomRepository {
                                 ((typeSystem, record) ->
                                         new UnitChainDto(
                                                 record.get("headUnitName").asString(),
-                                                        record.get("headUnitNum").asInt(),
+                                                record.get("headUnitNum").asInt(),
+                                                record.get("headId").asString(),
                                                 record.get("middleUnitName").asString(),
-                                                        record.get("middleUnitNum").asInt(),
+                                                record.get("middleUnitNum").asInt(),
+                                                record.get("middleId").asString(),
                                                 record.get("tailUnitName").asString(),
-                                                        record.get("tailUnitNum").asInt())))
+                                                record.get("tailUnitNum").asInt(),
+                                                record.get("tailId").asString())))
                         .one();
 
         return unitChainDto;

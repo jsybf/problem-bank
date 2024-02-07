@@ -58,7 +58,8 @@ class UnitTagCustomRepositoryImplTest {
                 unitTagCustomRepository.getUnitChainDtoByTailUnitTagId(tail.getId()).orElseThrow();
 
         // then
-        Assertions.assertThat(unitChain.getTailUnitNum()).isEqualTo(tail.getUnitNum());
-        Assertions.assertThat(unitChain.getMiddleUnitName()).isEqualTo(middle.getUnitName());
+
+        Assertions.assertThat(unitChain.getTailUnit().getUnitNum()).isEqualTo(tail.getUnitNum());
+        Assertions.assertThat(unitChain.getMiddleUnit().getUnitName()).isEqualTo(middle.getUnitName());
     }
 }
