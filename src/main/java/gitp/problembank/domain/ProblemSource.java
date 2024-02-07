@@ -1,5 +1,7 @@
 package gitp.problembank.domain;
 
+import gitp.problembank.domain.tag.YearTag;
+
 import lombok.Getter;
 import lombok.Setter;
 

@@ -1,7 +1,7 @@
 package gitp.problembank.dto.domain;
 
 import gitp.problembank.domain.Problem;
-import gitp.problembank.domain.SkillTag;
+import gitp.problembank.domain.tag.SkillTag;
 
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -33,19 +33,23 @@ public class ProblemDto {
 
     private ProblemSourceDto problemSourceDto;
 
+    private AbstractUnitTagDto tailUnitTagDto;
+
     private ProblemDto(
             String id,
             String name,
             Long rdbmsId,
             Set<ProblemDto> relatedProblemDtoSet,
             Set<SkillTagDto> skillTagDtoSet,
-            ProblemSourceDto problemSourceDto) {
+            ProblemSourceDto problemSourceDto,
+            AbstractUnitTagDto tailUnitTagDto) {
         this.id = id;
         this.name = name;
         this.rdbmsId = rdbmsId;
         this.relatedProblemDtoSet = relatedProblemDtoSet;
         this.skillTagDtoSet = skillTagDtoSet;
         this.problemSourceDto = problemSourceDto;
+        this.tailUnitTagDto = tailUnitTagDto;
     }
 
     public static ProblemDto of(
@@ -60,7 +64,29 @@ public class ProblemDto {
         }
 
         return new ProblemDto(
-                id, name, rdbmsId, relatedProblemDtoSet, skillTagDtoSet, problemSourceDto);
+                id, name, rdbmsId, relatedProblemDtoSet, skillTagDtoSet, problemSourceDto, null);
+    }
+
+    public static ProblemDto of(
+            String id,
+            String name,
+            Long rdbmsId,
+            Set<ProblemDto> relatedProblemDtoSet,
+            Set<SkillTagDto> skillTagDtoSet,
+            ProblemSourceDto problemSourceDto,
+            AbstractUnitTagDto abstractUnitTagDto) {
+        if (id == null) {
+            throw new IllegalArgumentException("id must not be null");
+        }
+
+        return new ProblemDto(
+                id,
+                name,
+                rdbmsId,
+                relatedProblemDtoSet,
+                skillTagDtoSet,
+                problemSourceDto,
+                abstractUnitTagDto);
     }
 
     private static ProblemDto toDtoExceptRelatedProblemDtoSet(Problem entity) {
@@ -74,7 +100,8 @@ public class ProblemDto {
                 entity.getRdbmsId(),
                 new HashSet<ProblemDto>(),
                 skillTagDtos,
-                ProblemSourceDto.toDto(entity.getProblemSource()));
+                ProblemSourceDto.toDto(entity.getProblemSource()),
+                AbstractUnitTagDto.toDto(entity.getTailUnitTag()));
     }
 
     private static void toDtoByDfs(
@@ -93,7 +120,8 @@ public class ProblemDto {
     }
 
     private static Problem toEntityExceptRelatedProblemSet(ProblemDto dto) {
-        Problem entity = Problem.of(dto.name, dto.rdbmsId, dto.problemSourceDto.toEntity());
+        Problem entity = Problem.of(dto.name, dto.rdbmsId, dto.problemSourceDto.toEntity(),
+            dto.tailUnitTagDto.toTailUnitTag());
 
         Set<SkillTag> skillTagSet =
                 dto.skillTagDtoSet.stream().map(SkillTagDto::toEntity).collect(Collectors.toSet());

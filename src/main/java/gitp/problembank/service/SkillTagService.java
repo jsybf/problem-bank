@@ -1,18 +1,14 @@
 package gitp.problembank.service;
 
-import gitp.problembank.domain.SkillTag;
-import gitp.problembank.domain.YearTag;
+import gitp.problembank.domain.tag.SkillTag;
 import gitp.problembank.dto.domain.SkillTagDto;
-import gitp.problembank.dto.domain.YearTagDto;
 import gitp.problembank.repository.SkillTagRepository;
-import gitp.problembank.repository.YearTagRepository;
 
 import lombok.RequiredArgsConstructor;
 
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.time.Year;
 import java.util.Optional;
 
 @Service

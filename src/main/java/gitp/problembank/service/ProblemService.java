@@ -1,12 +1,11 @@
 package gitp.problembank.service;
 
 import gitp.problembank.domain.Problem;
-import gitp.problembank.domain.SkillTag;
+import gitp.problembank.domain.tag.SkillTag;
 import gitp.problembank.dto.domain.ProblemDto;
 import gitp.problembank.dto.domain.SkillTagDto;
 import gitp.problembank.repository.ProblemRepository;
 
-import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 
 import org.springframework.stereotype.Service;
@@ -15,6 +14,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.NoSuchElementException;
+import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 

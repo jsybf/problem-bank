@@ -1,6 +1,6 @@
 package gitp.problembank.repository;
 
-import gitp.problembank.domain.SkillTag;
+import gitp.problembank.domain.tag.SkillTag;
 
 import org.springframework.data.neo4j.repository.Neo4jRepository;
 

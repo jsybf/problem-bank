@@ -1,4 +1,4 @@
-package gitp.problembank.domain;
+package gitp.problembank.domain.tag;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -7,20 +7,22 @@ import org.springframework.data.neo4j.core.schema.GeneratedValue;
 import org.springframework.data.neo4j.core.schema.Id;
 import org.springframework.data.neo4j.core.schema.Node;
 
-@Node("skill_tag")
+import java.time.Year;
+
+@Node("year_tag")
 @Getter
-public class SkillTag {
+public class YearTag {
 
     @Id @GeneratedValue private String id;
 
-    @Setter private String title;
+    @Setter private Year year;
 
-    private SkillTag(String title) {
-        this.title = title;
+    private YearTag(Year year) {
+        this.year = year;
     }
 
-    public static SkillTag of(String title) {
-        return new SkillTag(title);
+    public static YearTag of(Year year) {
+        return new YearTag(year);
     }
 
     @Override
@@ -32,13 +34,13 @@ public class SkillTag {
             return false;
         }
 
-        SkillTag skillTag = (SkillTag) o;
+        YearTag yearTag = (YearTag) o;
 
-        return title.equals(skillTag.title);
+        return year.equals(yearTag.year);
     }
 
     @Override
     public int hashCode() {
-        return title.hashCode();
+        return year.hashCode();
     }
 }

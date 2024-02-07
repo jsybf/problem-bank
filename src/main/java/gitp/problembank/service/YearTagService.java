@@ -1,6 +1,6 @@
 package gitp.problembank.service;
 
-import gitp.problembank.domain.YearTag;
+import gitp.problembank.domain.tag.YearTag;
 import gitp.problembank.dto.domain.YearTagDto;
 import gitp.problembank.repository.YearTagRepository;
 

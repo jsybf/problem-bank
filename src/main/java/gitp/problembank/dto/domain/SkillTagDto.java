@@ -1,6 +1,6 @@
 package gitp.problembank.dto.domain;
 
-import gitp.problembank.domain.SkillTag;
+import gitp.problembank.domain.tag.SkillTag;
 
 import lombok.Getter;
 

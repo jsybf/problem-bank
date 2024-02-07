@@ -3,7 +3,7 @@ package gitp.problembank.dto.domain;
 import gitp.problembank.domain.Problem;
 import gitp.problembank.domain.ProblemSource;
 import gitp.problembank.domain.ProblemSourceType;
-import gitp.problembank.domain.YearTag;
+import gitp.problembank.domain.tag.YearTag;
 
 import org.junit.jupiter.api.Test;
 
