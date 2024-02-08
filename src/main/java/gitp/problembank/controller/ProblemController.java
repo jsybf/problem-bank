@@ -12,6 +12,7 @@ import lombok.extern.slf4j.Slf4j;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.MissingServletRequestParameterException;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -48,30 +49,44 @@ public class ProblemController {
     @GetMapping
     public String detailProblemResearch(
             @RequestParam List<String> skillTagIds,
-            @RequestParam Integer yearInt,
-            @RequestParam String yearResearchingType,
+            @RequestParam(required = false) Integer yearInt,
+            @RequestParam(required = false) String yearResearchingType,
             @RequestParam List<String> problemSourceTypes,
             @RequestParam List<String> problemSourceIds,
             @RequestParam List<String> unitTagsId) {
-        // string to enum and year
         ProblemResearchParamDto problemResearchParamDto;
         try {
             problemResearchParamDto =
                     ProblemResearchParamDto.of(
                             skillTagIds.stream().collect(Collectors.toSet()),
-                            Year.of(yearInt),
-                            YearResearchingType.valueOf(yearResearchingType),
+                            null,
+                            null,
                             problemSourceTypes.stream()
                                     .map(string -> ProblemSourceType.valueOf(string))
                                     .collect(Collectors.toSet()),
                             problemSourceIds.stream().collect(Collectors.toSet()),
                             unitTagsId.stream().collect(Collectors.toSet()));
+            if (yearInt != null) {
+                problemResearchParamDto.setYear(Year.of(yearInt));
+                // YearResearchingType is required when yearInt is not null
+                if (yearResearchingType == null) {
+                    throw new MissingServletRequestParameterException(
+                            "yearResearchingType", "String");
+                }
+                problemResearchParamDto.setYearResearchingType(
+                        YearResearchingType.valueOf(yearResearchingType));
+            }
         } catch (DateTimeException e) {
             log.info(String.format("invalid integer year value %d", yearInt));
             // TODO: return http response
         } catch (IllegalArgumentException e) {
             log.info(e.getMessage());
             // TODO: return http response
+        } catch (MissingServletRequestParameterException e) {
+            throw new RuntimeException(e);
+        } catch (Exception e) {
+            log.info("unexpected exception(exception message below)");
+            log.info(e.getMessage());
         }
         return null;
     }
