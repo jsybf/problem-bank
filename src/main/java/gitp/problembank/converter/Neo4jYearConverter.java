@@ -26,9 +26,9 @@ public class Neo4jYearConverter implements GenericConverter {
     @Override
     public Object convert(Object source, TypeDescriptor sourceType, TypeDescriptor targetType) {
         if (Year.class.isAssignableFrom(sourceType.getType())) {
-            return Values.value(source.toString());
+            return Values.value(((Year) source).getValue());
         } else {
-            return Year.of(Integer.parseInt(source.toString().replace("\"", "")));
+            return Year.of(((Value) source).asInt());
         }
     }
 }
