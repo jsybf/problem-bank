@@ -21,6 +21,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import java.time.DateTimeException;
 import java.time.Year;
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 @Controller
@@ -53,19 +54,23 @@ public class ProblemController {
             @RequestParam(required = false) String yearResearchingType,
             @RequestParam List<String> problemSourceTypes,
             @RequestParam List<String> problemSourceIds,
-            @RequestParam List<String> unitTagsId) {
+            @RequestParam List<String> headUnitTagIds,
+            @RequestParam List<String> middleUnitTagIds,
+            @RequestParam List<String> tailUnitTagIds) {
         ProblemResearchParamDto problemResearchParamDto;
         try {
             problemResearchParamDto =
                     ProblemResearchParamDto.of(
-                            skillTagIds.stream().collect(Collectors.toSet()),
+                            Set.copyOf(skillTagIds),
                             null,
                             null,
                             problemSourceTypes.stream()
-                                    .map(string -> ProblemSourceType.valueOf(string))
+                                    .map(ProblemSourceType::valueOf)
                                     .collect(Collectors.toSet()),
-                            problemSourceIds.stream().collect(Collectors.toSet()),
-                            unitTagsId.stream().collect(Collectors.toSet()));
+                            Set.copyOf(problemSourceIds),
+                            Set.copyOf(headUnitTagIds),
+                            Set.copyOf(middleUnitTagIds),
+                            Set.copyOf(tailUnitTagIds));
             if (yearInt != null) {
                 problemResearchParamDto.setYear(Year.of(yearInt));
                 // YearResearchingType is required when yearInt is not null

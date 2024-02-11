@@ -1,7 +1,6 @@
 package gitp.problembank.repository;
 
 import gitp.problembank.dto.ProblemResearchParamDto;
-import gitp.problembank.dto.UnitChainDto;
 
 import lombok.RequiredArgsConstructor;
 
@@ -29,7 +28,8 @@ public class ProblemResearchRepository {
     public Set<String> research(ProblemResearchParamDto paramDto) {
         ResultStatement query = generateResearchQuery(paramDto);
 
-        return new HashSet<>(neo4jClient.query(neo4jRenderer.render(query)).fetchAs(String.class).all());
+        return new HashSet<>(
+                neo4jClient.query(neo4jRenderer.render(query)).fetchAs(String.class).all());
     }
 
     public ResultStatement generateResearchQuery(ProblemResearchParamDto paramDto) {
@@ -98,60 +98,27 @@ public class ProblemResearchRepository {
             stConditions = st.property("id").in(stIdList);
         }
 
-
-        //##### 3/3
+        // ##### 3/3
         // build unit tag conditions
-        List<UnitChainDto> firstDepth = new ArrayList<>();
-        List<UnitChainDto> secondDepth = new ArrayList<>();
-        List<UnitChainDto> thirdDepth = new ArrayList<>();
-
-        for (UnitChainDto unitChainDto : paramDto.getUnitChainDtos()) {
-            if (unitChainDto.getHeadUnit().getId() != null
-                    && unitChainDto.getMiddleUnit().getId() == null
-                    && unitChainDto.getTailUnit().getId() == null) {
-                firstDepth.add(unitChainDto);
-            } else if (unitChainDto.getHeadUnit().getId() != null
-                    && unitChainDto.getMiddleUnit().getId() != null
-                    && unitChainDto.getTailUnit().getId() == null) {
-                secondDepth.add(unitChainDto);
-            } else if (unitChainDto.getHeadUnit().getId() != null
-                    && unitChainDto.getMiddleUnit().getId() != null
-                    && unitChainDto.getTailUnit().getId() != null) {
-                thirdDepth.add(unitChainDto);
-            } else {
-                throw new IllegalArgumentException("unit chain should be concatenate");
-            }
-        }
-        ListExpression firstDepthExp =
-                Cypher.listOf(
-                        firstDepth.stream()
-                                .map(dto -> Cypher.literalOf(dto.getHeadUnit().getId()))
-                                .toList());
-
-        ListExpression secondDepthExp =
-                Cypher.listOf(
-                        secondDepth.stream()
-                                .map(dto -> Cypher.literalOf(dto.getMiddleUnit().getId()))
-                                .toList());
-
-        ListExpression thirdDepthExp =
-                Cypher.listOf(
-                        thirdDepth.stream()
-                                .map(dto -> Cypher.literalOf(dto.getTailUnit().getId()))
-                                .toList());
+        ListExpression headUnitTagIds =
+                Cypher.listOf(paramDto.getHeadUnitIds().stream().map(Cypher::literalOf).toList());
+        ListExpression middleUnitTagIds =
+                Cypher.listOf(paramDto.getMiddleUnitIds().stream().map(Cypher::literalOf).toList());
+        ListExpression tailUnitTagIds =
+                Cypher.listOf(paramDto.getTailUnitIds().stream().map(Cypher::literalOf).toList());
 
         Condition unitCondition = Conditions.noCondition();
-        if (!firstDepth.isEmpty()) {
-            unitCondition = unitCondition.or(hut.property("id").in(firstDepthExp));
+        if (!paramDto.getHeadUnitIds().isEmpty()) {
+            unitCondition = unitCondition.or(hut.property("id").in(headUnitTagIds));
         }
-        if(!secondDepth.isEmpty()) {
-            unitCondition = unitCondition.or(mut.property("id").in(secondDepthExp));
+        if (!paramDto.getMiddleUnitIds().isEmpty()) {
+            unitCondition = unitCondition.or(mut.property("id").in(middleUnitTagIds));
         }
-        if(!thirdDepth.isEmpty()) {
-            unitCondition = unitCondition.or(tut.property("id").in(thirdDepthExp));
+        if (!paramDto.getTailUnitIds().isEmpty()) {
+            unitCondition = unitCondition.or(tut.property("id").in(tailUnitTagIds));
         }
 
-        //##### build final research query
+        // ##### build final research query
         ResultStatement query =
                 Cypher.match(p.relationshipTo(ps, "source").relationshipTo(yt, "tagged"))
                         .where(psAggregatedCondtion)

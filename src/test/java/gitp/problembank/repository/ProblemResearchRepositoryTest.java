@@ -33,6 +33,8 @@ class ProblemResearchRepositoryTest extends Neo4jTestSupporter {
                         YearResearchingType.ON_OR_AFTER,
                         Set.of(ProblemSourceType.KICE),
                         Set.of("ps_id1", "ps_id2"),
+                        Set.of(),
+                        Set.of(),
                         Set.of());
         ResultStatement query = problemResearchRepository.generateResearchQuery(paramDto);
         System.out.println(cypherRenderer.render(query));
@@ -51,7 +53,9 @@ class ProblemResearchRepositoryTest extends Neo4jTestSupporter {
                         YearResearchingType.ON_OR_AFTER,
                         Set.of(),
                         Set.of(),
-                        Set.of(unitChainDto1, unitChainDto2, unitChainDto3));
+                        Set.of("head_id_1"),
+                        Set.of("middle_id_1", "middle_id_2"),
+                        Set.of());
         // when
         Set<String> result = problemResearchRepository.research(paramDto);
         // then
@@ -68,6 +72,8 @@ class ProblemResearchRepositoryTest extends Neo4jTestSupporter {
                                 "f175ec86-a683-410a-b773-d6c66e633d94"),
                         Year.of(2022),
                         YearResearchingType.ON_OR_AFTER,
+                        Set.of(),
+                        Set.of(),
                         Set.of(),
                         Set.of(),
                         Set.of());
