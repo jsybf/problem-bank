@@ -6,12 +6,15 @@ import lombok.Setter;
 import org.springframework.data.neo4j.core.schema.GeneratedValue;
 import org.springframework.data.neo4j.core.schema.Id;
 import org.springframework.data.neo4j.core.schema.Node;
+import org.springframework.data.neo4j.core.support.UUIDStringGenerator;
 
 @Node("skill_tag")
 @Getter
 public class SkillTag {
 
-    @Id @GeneratedValue private String id;
+    @Id
+    @GeneratedValue(UUIDStringGenerator.class)
+    private String id;
 
     @Setter private String title;
 
