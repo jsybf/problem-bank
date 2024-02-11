@@ -26,4 +26,8 @@ public class UnitChainDto {
         this.middleUnit = new AbstractUnitTagDto(middleUnitId, middleUnitName, middleUnitNum);
         this.tailUnit = new AbstractUnitTagDto(tailUnitId, tailUnitName, tailUnitNum);
     }
+
+    public static UnitChainDto of(String headId, String middleId, String tailId) {
+        return new UnitChainDto(null, null, headId, null, null, middleId, null, null, tailId);
+    }
 }

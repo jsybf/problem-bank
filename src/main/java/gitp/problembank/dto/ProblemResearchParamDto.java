@@ -20,7 +20,7 @@ public class ProblemResearchParamDto {
     Set<ProblemSourceType> problemSourceTypes = new HashSet<>();
     Set<String> problemSourceIds = new HashSet<>();
 
-    Set<String> unitTagIds = new HashSet<>();
+    Set<UnitChainDto> unitChainDtos = new HashSet<>();
 
     public ProblemResearchParamDto(
             Set<String> skillTagIds,
@@ -28,13 +28,13 @@ public class ProblemResearchParamDto {
             YearResearchingType yearResearchingType,
             Set<ProblemSourceType> problemSourceTypes,
             Set<String> problemSourceIds,
-            Set<String> unitTagIds) {
+            Set<UnitChainDto> unitChainDtos) {
         this.skillTagIds = skillTagIds;
         this.year = year;
         this.yearResearchingType = yearResearchingType;
         this.problemSourceTypes = problemSourceTypes;
         this.problemSourceIds = problemSourceIds;
-        this.unitTagIds = unitTagIds;
+        this.unitChainDtos = unitChainDtos;
     }
 
     public static ProblemResearchParamDto of(
@@ -43,13 +43,13 @@ public class ProblemResearchParamDto {
             YearResearchingType yearResearchingType,
             Set<ProblemSourceType> problemSourceTypes,
             Set<String> problemSourceIds,
-            Set<String> unitTagIds) {
+            Set<UnitChainDto> unitChainDtos) {
         return new ProblemResearchParamDto(
                 skillTagIds,
                 year,
                 yearResearchingType,
                 problemSourceTypes,
                 problemSourceIds,
-                unitTagIds);
+                unitChainDtos);
     }
 }
